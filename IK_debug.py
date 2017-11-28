@@ -62,7 +62,7 @@ def test_code(test_case):
     start_time = time()
 
     ########################################################################################
-    ## 
+    ##
 
     ## Insert IK code here!
 
@@ -98,15 +98,22 @@ def test_code(test_case):
     #
     # Create individual transformation matrices
     T0_1 = TF_Matrix(alpha0, a0, d1, q1).subs(DH_params)
+    print("T0_1",T0_1)
     T1_2 = TF_Matrix(alpha1, a1, d2, q2).subs(DH_params)
+    print("T1_2",T1_2)
     T2_3 = TF_Matrix(alpha2, a2, d3, q3).subs(DH_params)
+    print("T2_3",T2_3)
     T3_4 = TF_Matrix(alpha3, a3, d4, q4).subs(DH_params)
+    print("T3_4",T3_4)
     T4_5 = TF_Matrix(alpha4, a4, d5, q5).subs(DH_params)
+    print("T4_5",T4_5)
     T5_6 = TF_Matrix(alpha5, a5, d6, q6).subs(DH_params)
+    print("T5_6",T5_6)
     T6_G = TF_Matrix(alpha6, a6, d7, q7).subs(DH_params)
+    print("T6_G",T6_G)
 
-    T0_G = T0_1 * T1_2 * T2_3 * T3_4 * T4_5 * T5_6 * T6_G
-
+    T0_G = simplify(T0_1 * T1_2 * T2_3 * T3_4 * T4_5 * T5_6 * T6_G)
+    print("T0_G",T0_G)
 
     # Extract end-effector position and orientation from request
     # px,py,pz = end-effector position
@@ -187,9 +194,9 @@ def test_code(test_case):
     R0_3 = R0_3.evalf(subs={q1: theta1, q2: theta2, q3: theta3})
     #Then apply this inversely to the desired end effector orientation to obtain the necessary rotational tranform
     #of the spherical wrist
-	
-	R3_6sym = T3_4[0:3,0:3]*T4_5[0:3,0:3]*T5_6[0:3,0:3]*T6_G[0:3,0:3]
-	print ("R3_6 Symbolic", R3_6sym)
+
+    R3_6sym = T3_4[0:3,0:3]*T4_5[0:3,0:3]*T5_6[0:3,0:3]*T6_G[0:3,0:3]
+    print ("R3_6 Symbolic", R3_6sym)
 
     #R3_6 = R0_3.inv("LU") * ROT_G
     R3_6 = transpose(R0_3) * ROT_G
@@ -198,9 +205,9 @@ def test_code(test_case):
     ###
     # Use the rotation matrix to determine the Euler angles for theta 4, 5, 6
     theta4 = atan2(R3_6[2,2], -R3_6[0,2])
-	theta5 = atan2(sqrt((R3_6[1,0]*R3_6[1,0] + R3_6[1,1]*R3_6[1,1])),R3_6[1,2])
-	theta6 = atan2(-R3_6[1,1], R3_6[1,0])
-	
+    theta5 = atan2(sqrt((R3_6[1,0]*R3_6[1,0] + R3_6[1,1]*R3_6[1,1])),R3_6[1,2])
+    theta6 = atan2(-R3_6[1,1], R3_6[1,0])
+
     ##
     ########################################################################################
 

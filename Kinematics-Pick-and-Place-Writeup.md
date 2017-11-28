@@ -19,17 +19,11 @@ You're reading it!
 ### Kinematic Analysis
 #### 1. Run the forward_kinematics demo and evaluate the kr210.urdf.xacro file to perform kinematic analysis of Kuka KR210 robot and derive its DH parameters.
 
-Forward kinematics is concerned with calculating the pose of an object given the states of its kinematic parameters. For the KR210 serial manipulator used in this project, those parameters include the joint angles, orientation, and arm segment lengths.
+Forward kinematics is concerned with calculating the pose of an object given the states of its kinematic parameters. In this project, modified Denavit-Hartenberg(DH) parameters are used to associate reference frames to each link. Names and definitions for the parameters are included in Appendix A. For the KR210 serial manipulator used in this project, those parameters include the twist angles, link length, link offset, and joint angles. These parameters are then used to create transform equations to describe the translation and orientation of one link in the manipulator relative to another. The diagram below shows the parameters related to the KR210 robot arm.
 
-In this project, modified Denavit-Hartenberg(DH) parameters are used to associate reference frames to each link. These parameters are then used to create transform equations to describe the translation and orientation of one link in the manipulator relative to another. The diagram below shows the parameters related to the KR210 robot arm.
+--INSERT DH PARAMETER DIAGRAM--
 
-
-These parameters were determined following the process outlined in appendix ##.
-
-
-Run the forward_kinematics demo and evaluate the kr210.urdf.xacro file to perform kinematic analysis of Kuka KR210 robot and derive its DH parameters.
-
-Your writeup should contain a DH parameter table with proper notations and description about how you obtained the table. Make sure to use the modified DH parameters discussed in this lesson. Please add an annotated figure of the robot with proper link assignments and joint rotations (Example figure provided in the writeup template). It is strongly recommended that you use pen and paper to create this figure to get a better understanding of the robot kinematics.
+These parameters were determined following the process outlined in appendix B.
 
 Here is an example of how to include an image in your writeup.
 
@@ -43,11 +37,61 @@ Links | alpha(i-1) | a(i-1) | d(i-1) | theta(i)
 3->4  | -pi/2      | -0.054 | 1.50   | q4
 4->5  | pi/2       | 0      | 0      | q5
 5->6  | -pi/2      | 0      | 0.303  | q6
-6->EE | 0          | 0      | 0.303  | 0
+6->Gripper | 0          | 0      | 0.303  | 0
 
 #### 2. Using the DH parameter table you derived earlier, create individual transformation matrices about each joint. In addition, also generate a generalized homogeneous transform between base_link and gripper_link using only end-effector(gripper) pose.
 
 Your writeup should contain individual transform matrices about each joint using the DH table and a homogeneous transform matrix from base_link to gripper_link using only the position and orientation of the gripper_link. These matrices can be created using any software of your choice or hand written. Also include an explanation on how you created these matrices.
+
+The following are individual transformation matrices between each link on the KR210. These were generated using the IK_debug program but are also obtainable using the general transformation and substituting the values from the DH parameter table.
+
+T0_1=
+[cos(q1), -sin(q1), 0,  0.0],
+[sin(q1),  cos(q1), 0,    0],
+[      0,        0, 1, 0.75],
+[      0,        0, 0,    1]
+
+T1_2=
+[ cos(q2 - 0.5*pi), -sin(q2 - 0.5*pi), 0, 0.35],
+[                0,                 0, 1,  0.0],
+[-sin(q2 - 0.5*pi), -cos(q2 - 0.5*pi), 0,    0],
+[                0,                 0, 0,    1]
+
+T2_3=
+[cos(q3), -sin(q3), 0, 1.25],
+[sin(q3),  cos(q3), 0,    0],
+[      0,        0, 1,  0.0],
+[      0,        0, 0,    1]
+
+T3_4=
+[ cos(q4), -sin(q4), 0, -0.054],
+[       0,        0, 1,    1.5],
+[-sin(q4), -cos(q4), 0,      0],
+[       0,        0, 0,      1]
+
+T4_5=
+[cos(q5), -sin(q5),  0, 0.0],
+[      0,        0, -1,   0],
+[sin(q5),  cos(q5),  0,   0],
+[      0,        0,  0,   1]
+
+T5_6=
+[ cos(q6), -sin(q6), 0,   0.0],
+[       0,        0, 1, 0.303],
+[-sin(q6), -cos(q6), 0,     0],
+[       0,        0, 0,     1]
+
+T6_G=
+[1, 0, 0,   0.0],
+[0, 1, 0,     0],
+[0, 0, 1, 0.303],
+[0, 0, 0,     1]
+
+Multiplying these individual matrices gives us the homogeneous transform from the base link to the gripper, shown below.
+
+T0_G=
+
+
 
 #### 3. Decouple Inverse Kinematics problem into Inverse Position Kinematics and inverse Orientation Kinematics; doing so derive the equations to calculate all individual joint angles.
 
@@ -78,6 +122,15 @@ IK_server.py must contain properly commented code. The robot must track the plan
 To have a standout submission, calculate and plot the error in end-effector pose generated by your joint angle commands. You can do this by calculating end-effector poses via Forward Kinematics using your code output (which is a set of joint angles) and comparing it with the end-effector poses you received as input.
 
 ### Appendix A
+
+α ​i−1​​ (twist angle) = angle between ​Z​^​​​i−1​​ and ​Z​^​​​i​​ measured about ​X​^​​​i−1​​ in a right-hand sense.
+
+a ​i−1​​ (link length) = distance from ​Z​^​​​i−1​​ to ​Z​^​​​i​​ measured along ​X​^​​​i−1​​ where ​X​^​​​i−1​​ is perpendicular to both ​Z​^​​​i−1​​ to ​Z​^​​​i​​
+
+d​i​​ (link offset) = signed distance from ​X​^​​​i−1​​ to ​X​^​​​i​​ measured along ​Z​^​​​i​​. Note that this quantity will be a variable in the case of prismatic joints.
+
+θ​i​​ (joint angle) = angle between ​X​^​​​i−1​​ to ​X​^​​​i​​ measured about ​Z​^​​​i​​ in a right-hand sense. Note that this quantity will be a variable in the case of a revolute joint.
+
 ## Denavit-Hartenberg Parameter Assignment Algorithm
 
 1)  Label all joints from {1, 2, … , n}.
