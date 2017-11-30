@@ -23,7 +23,7 @@ Forward kinematics is concerned with calculating the pose of an object given the
 
 --INSERT DH PARAMETER DIAGRAM--
 
-These parameters were determined following the process outlined in appendix B.
+These parameters were determined following the process outlined in appendix B. An offset of -90 degrees is necessary for theta 2 due to the physical layout of the KR210 arm.
 
 Here is an example of how to include an image in your writeup.
 
@@ -108,22 +108,35 @@ Theta 1 can be solved for by projecting the wrist center coordinates onto the gr
 ![alt text][image2]
 Theta 2 and theta 3 can be better understood by referring to the above picture, showing both joints projected onto the x-z plane.
 
-First, the triangle formed by joint 2, joint 3 and the wrist center is specified
+First, the triangle formed by joint 2, joint 3 and the wrist center is solved. Two of the sides correspond to DH parameters determined earlier
 
-sideA = 1.501 #DH parameter d4
+	sideA = 1.501 #DH parameter d4
 	sideC = 1.25 #DH parameter a2
+The third side can be found by creating a new right triangle with vertices at J2, wrist center, and the point at wrist center x and joint 2 z. The third side can then be solved as the hypotenuse of this new triangle.
+
 	sideB = sqrt(pow((sqrt(WC[0]WC[0]+WC[1]*WC[1])-0.35),2)+pow((WC[2]-0.75),2))
+
+The corresponding angles using the side lengths and the arc cos function.
 
 	angA = acos((sideB*sideB+sideC*sideC-sideA*sideA)/(2*sideB*sideC))
 	angB = acos((sideA*sideA+sideC*sideC-sideB*sideB)/(2*sideA*sideC))
 	angC = acos((sideA*sideA+sideB*sideB-sideC*sideC)/(2*sideA*sideB))
 
+Theta 2 can be solved by using angA and solving for the angle formed by WC, J2, and WCxJ2z and relative to 90 degrees vertical
 
-	#theta 2
 	theta2 = pi/2 - angA - atan2(WC[2]-0.75,sqrt(WC[0]*WC[0]+WC[1]*WC[1])-0.35)
-	#
+
+Theta 3 can then be solved using angB and the 90 degree vertical.
+
 	theta3 = pi/2 - (angB + 0.036) #0.036 adjusts for -0.054m drop in link 4
-	#
+
+With the first 3 joint angles solved to give our wrist center position, we can move on to solve the final 3 joints for orientation.
+First we substitute the values for the first 3 joints into our complete transform. Then we use the inverse of the rotational component of the transform up to J3 to determine the difference in orientation that needs to be accounted for in J4-J6. By examining the rotational component of the symbolic transform from J4-J6 show below, we can solve for the remaining joint angles using the atan2 function.
+
+
+theta4 = atan2(R3_6[2,2], -R3_6[0,2])
+theta5 = atan2(sqrt((R3_6[1,0]*R3_6[1,0] + R3_6[1,1]*R3_6[1,1])),R3_6[1,2])
+theta6 = atan2(-R3_6[1,1], R3_6[1,0])
 
 Based on the geometric Inverse Kinematics method described here, breakdown the IK problem into Position and Orientation problems. Derive the equations for individual joint angles. Your writeup must contain details about the steps you took to arrive at those equations. Add figures where necessary. If any given joint has multiple solutions, select the best solution and provide explanation about your choice (Hint: Observe the active robot workspace in this project and the fact that some joints have physical limits).
 
