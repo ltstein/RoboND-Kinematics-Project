@@ -5,6 +5,7 @@
 [image1]: ./misc_images/misc1.png
 [image2]: ./misc_images/misc3.png
 [image3]: ./misc_images/misc2.png
+[image4]: ./misc_images/kuka-arm-diagram.jpg
 
 ## Rubric Points
 ### Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
@@ -21,13 +22,10 @@ You're reading it!
 
 Forward kinematics is concerned with calculating the pose of an object given the states of its kinematic parameters. In this project, modified Denavit-Hartenberg(DH) parameters are used to associate reference frames to each link. Names and definitions for the parameters are included in Appendix A. For the KR210 serial manipulator used in this project, those parameters include the twist angles, link length, link offset, and joint angles. These parameters are then used to create transform equations to describe the translation and orientation of one link in the manipulator relative to another. The diagram below shows the parameters related to the KR210 robot arm.
 
---INSERT DH PARAMETER DIAGRAM--
+![alt text][image4]
 
 These parameters were determined following the process outlined in appendix B. An offset of -90 degrees is necessary for theta 2 due to the physical layout of the KR210 arm.
 
-Here is an example of how to include an image in your writeup.
-
-![alt text][image1]
 
 Links | alpha(i-1) | a(i-1) | d(i-1) | theta(i)
 ---   | ---        | ---    | ---    | ---
@@ -39,9 +37,6 @@ Links | alpha(i-1) | a(i-1) | d(i-1) | theta(i)
 5->6  | -pi/2      | 0      | 0.303  | q6
 6->Gripper | 0          | 0      | 0.303  | 0
 
-#### 2. Using the DH parameter table you derived earlier, create individual transformation matrices about each joint. In addition, also generate a generalized homogeneous transform between base_link and gripper_link using only end-effector(gripper) pose.
-
-Your writeup should contain individual transform matrices about each joint using the DH table and a homogeneous transform matrix from base_link to gripper_link using only the position and orientation of the gripper_link. These matrices can be created using any software of your choice or hand written. Also include an explanation on how you created these matrices.
 
 The following are individual transformation matrices between each link on the KR210. These were generated using the IK_debug program but are also obtainable using the general transformation and substituting the values from the DH parameter table.
 
@@ -87,16 +82,9 @@ T6_G=
 [0, 0, 1, 0.303],
 [0, 0, 0,     1]
 
-Multiplying these individual matrices gives us the composition of homogeneous transforms from the base link to the gripper, shown below.
+Multiplying these individual matrices gives us the composition of homogeneous transforms from the base link to the gripper.
 
-T0_G=
-
-
-
-
-#### 3. Decouple Inverse Kinematics problem into Inverse Position Kinematics and inverse Orientation Kinematics; doing so derive the equations to calculate all individual joint angles.
-
-And here's where you can draw out and show your math for the derivation of your theta angles.
+#### 3. Decouple Inverse Kinematics problem into Inverse Position Kinematics and inverse Orientation Kinematics
 
 The inverse kinematics problem to determine the required joint angles to obtain a desired gripper pose is split into two parts; inverse position and inverse orientation. Given the configuration of the KR210 arm, the first 3 joint angles can be used to determine the x,y, and z values for the gripper wrist center. The final 3 joints form what is called a spherical wrist, which determines the orientation of the grippers roll, pitch, and yaw.
 
@@ -134,31 +122,15 @@ With the first 3 joint angles solved to give our wrist center position, we can m
 First we substitute the values for the first 3 joints into our complete transform. Then we use the inverse of the rotational component of the transform up to J3 to determine the difference in orientation that needs to be accounted for in J4-J6. By examining the rotational component of the symbolic transform from J4-J6 show below, we can solve for the remaining joint angles using the atan2 function.
 
 
-theta4 = atan2(R3_6[2,2], -R3_6[0,2])
-theta5 = atan2(sqrt((R3_6[1,0]*R3_6[1,0] + R3_6[1,1]*R3_6[1,1])),R3_6[1,2])
-theta6 = atan2(-R3_6[1,1], R3_6[1,0])
+	theta4 = atan2(R3_6[2,2], -R3_6[0,2])
+	theta5 = atan2(sqrt((R3_6[1,0]*R3_6[1,0] + R3_6[1,1]*R3_6[1,1])),R3_6[1,2])
+	theta6 = atan2(-R3_6[1,1], R3_6[1,0])
 
-Based on the geometric Inverse Kinematics method described here, breakdown the IK problem into Position and Orientation problems. Derive the equations for individual joint angles. Your writeup must contain details about the steps you took to arrive at those equations. Add figures where necessary. If any given joint has multiple solutions, select the best solution and provide explanation about your choice (Hint: Observe the active robot workspace in this project and the fact that some joints have physical limits).
 
 ### Project Implementation
 
-#### 1. Fill in the `IK_server.py` file with properly commented python code for calculating Inverse Kinematics based on previously performed Kinematic Analysis. Your code must guide the robot to successfully complete 8/10 pick and place cycles. Briefly discuss the code you implemented and your results.
+After using the IK_debug routine to check and refine the methods discussed previously to solve the kinematics problem, I implemented the appropriate parts into the IK server code. Based on trial and error and mentorship in the classroom, I changed the method to obtain the inverse of the rotational transform matrix from J1-J3 from LU to using the transpose. While the implementation is able to perform the kinematics calculations with an acceptable level of error, there is still several areas where the implementation can be improved. The solution is not necessarily robust in dealing with potential kinematic singularities or using the optimal solution under conditions of multiple solutions.Another area of improvement would be reducing extraneous rotations when moving from between points on the calculated path. Along with this would be improving the error present in the kinematic solution.
 
-
-Here I'll talk about the code, what techniques I used, what worked and why, where the implementation might fail and how I might improve it if I were going to pursue this project further.  
-
-
-And just for fun, another example image:
-![alt text][image3]
-
-Project Implementation
-Criteria 	Meets Specifications
-
-Fill in the IK_server.py file with properly commented python code for calculating Inverse Kinematics based on previously performed Kinematic Analysis. Your code must guide the robot to successfully complete 8/10 pick and place cycles.
-
-IK_server.py must contain properly commented code. The robot must track the planned trajectory and successfully complete pick and place operation. Your writeup must include explanation for the code and a discussion on the results.
-
-To have a standout submission, calculate and plot the error in end-effector pose generated by your joint angle commands. You can do this by calculating end-effector poses via Forward Kinematics using your code output (which is a set of joint angles) and comparing it with the end-effector poses you received as input.
 
 ### Appendix A
 ## DH Paremeter Definitions
