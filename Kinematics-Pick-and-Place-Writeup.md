@@ -131,6 +131,68 @@ First we substitute the values for the first 3 joints into our complete transfor
 
 After using the IK_debug routine to check and refine the methods discussed previously to solve the kinematics problem, I implemented the appropriate parts into the IK server code. Based on trial and error and mentorship in the classroom, I changed the method to obtain the inverse of the rotational transform matrix from J1-J3 from LU to using the transpose. While the implementation is able to perform the kinematics calculations with an acceptable level of error, there is still several areas where the implementation can be improved. The solution is not necessarily robust in dealing with potential kinematic singularities or using the optimal solution under conditions of multiple solutions.Another area of improvement would be reducing extraneous rotations when moving from between points on the calculated path. Along with this would be improving the error present in the kinematic solution.
 
+Below are several screen shots taken during testing.
+
+Paths planned were followed closely by the robot arm, indicating successful inverse kinematics calculations.
+![alt text](./misc_images/to_pick_1.png)
+Path from start to pick
+![alt text](./misc_images/at pick.png)
+Success reaching pick position
+![alt text](./misc_images/gazebo pick 1.png)
+Pick position shown in gazebo
+![alt text](./misc_images/grasping.png)
+Grasping the target
+![alt text](./misc_images/picked 1)
+Successful pick
+![alt text](./misc_images/path to place 1)
+The planned path from pick to place
+![alt text](./misc_images/moving to place 1)
+Executing the planned path using the theta values calculated in my implementation of inverse kinematics
+![alt text](./misc_images/at place 1.png)
+Successfully reaching the target place location
+![alt text](./misc_images/gazebo at place.png)
+At place target location shown in Gazebo
+![alt text](./misc_images/place success 1)
+Successful place completed
+![alt text](./misc_images/gazebo at place.png)
+![alt text](./misc_images/pick path 2)
+The planned path to pick 2
+![alt text](./misc_images/move to pick 21)
+Following the path to the pick location...
+![alt text](./misc_images/move to pick 22)
+
+![alt text](./misc_images/move to pick 23)
+
+![alt text](./misc_images/move to pick 24)
+
+![alt text](./misc_images/move to pick 25)
+
+![alt text](./misc_images/move to pick 26)
+
+![alt text](./misc_images/move to pick 27)
+
+![alt text](./misc_images/move to pick 28)
+
+![alt text](./misc_images/move to pick 29)
+
+![alt text](./misc_images/gazebo at pick 2.png)
+Successfully reached pick target location
+![alt text](./misc_images/gazebo picking 2.png)
+Moving to grasp
+![alt text](./misc_images/gazebo grasp 2.png)
+Grasping the target
+![alt text](./misc_images/gazebo picked 2.png)
+Another successful pick!
+![alt text](./misc_images/path to place 2)
+The planned path to the place target location
+![alt text](./misc_images/place success 2)
+After traveling the path and completing the place
+
+After completing this 10 times in a row
+![alt text](./misc_images/place success 10)
+
+The stacking of the tagets at the place location helps to demonstrate the accuracy achieved by noticing the small differences in placement between successive place operations. 
+
 
 ### Appendix A
 ## DH Paremeter Definitions
