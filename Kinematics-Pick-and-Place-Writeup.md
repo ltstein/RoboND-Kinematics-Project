@@ -136,60 +136,60 @@ Below are several screen shots taken during testing.
 Paths planned were followed closely by the robot arm, indicating successful inverse kinematics calculations.
 ![alt text](./misc_images/to_pick_1.png)
 Path from start to pick
-![alt text](./misc_images/at pick.png)
+![alt text](./misc_images/at%20pick.png)
 Success reaching pick position
-![alt text](./misc_images/gazebo pick 1.png)
+![alt text](./misc_images/gazebo%20pick%201.png)
 Pick position shown in gazebo
 ![alt text](./misc_images/grasping.png)
 Grasping the target
-![alt text](./misc_images/picked 1)
+![alt text](./misc_images/picked%201)
 Successful pick
-![alt text](./misc_images/path to place 1)
+![alt text](./misc_images/path%20to%20place%201)
 The planned path from pick to place
-![alt text](./misc_images/moving to place 1)
+![alt text](./misc_images/moving%20to%20place%201)
 Executing the planned path using the theta values calculated in my implementation of inverse kinematics
-![alt text](./misc_images/at place 1.png)
-Successfully reaching the target place location
-![alt text](./misc_images/gazebo at place.png)
+![alt text](./misc_images/at%20place%201.png)
+Successfully reaching the target place location!
+![alt text](./misc_images/gazebo%20at%20place.png)
 At place target location shown in Gazebo
-![alt text](./misc_images/place success 1)
+![alt text](./misc_images/place%20success%201)
 Successful place completed
-![alt text](./misc_images/gazebo at place.png)
-![alt text](./misc_images/pick path 2)
+![alt text](./misc_images/gazebo%20at%20place.png)
+![alt text](./misc_images/pick%20path%202)
 The planned path to pick 2
-![alt text](./misc_images/move to pick 21)
+![alt text](./misc_images/move%20to%20pick%2021)
 Following the path to the pick location...
-![alt text](./misc_images/move to pick 22)
+![alt text](./misc_images/move%20to%20pick%2022)
 
-![alt text](./misc_images/move to pick 23)
+![alt text](./misc_images/move%20to%20pick%2023)
 
-![alt text](./misc_images/move to pick 24)
+![alt text](./misc_images/move%20to%20pick%2024)
 
-![alt text](./misc_images/move to pick 25)
+![alt text](./misc_images/move%20to%20pick%2025)
 
-![alt text](./misc_images/move to pick 26)
+![alt text](./misc_images/move%20to%20pick%2026)
 
-![alt text](./misc_images/move to pick 27)
+![alt text](./misc_images/move%20to%20pick%2027)
 
-![alt text](./misc_images/move to pick 28)
+![alt text](./misc_images/move%20to%20pick%2028)
 
-![alt text](./misc_images/move to pick 29)
+![alt text](./misc_images/move%20to%20pick%2029)
 
-![alt text](./misc_images/gazebo at pick 2.png)
+![alt text](./misc_images/gazebo%20at%20pick%202.png)
 Successfully reached pick target location
-![alt text](./misc_images/gazebo picking 2.png)
+![alt text](./misc_images/gazebo%20picking%202.png)
 Moving to grasp
-![alt text](./misc_images/gazebo grasp 2.png)
+![alt text](./misc_images/gazebo%20grasp%202.png)
 Grasping the target
-![alt text](./misc_images/gazebo picked 2.png)
+![alt text](./misc_images/gazebo%20picked%202.png)
 Another successful pick!
-![alt text](./misc_images/path to place 2)
+![alt text](./misc_images/path%20to%20place%202)
 The planned path to the place target location
-![alt text](./misc_images/place success 2)
+![alt text](./misc_images/place%20success%202)
 After traveling the path and completing the place
 
 After completing this 10 times in a row
-![alt text](./misc_images/place success 10)
+![alt text](./misc_images/place%20success%2010)
 
 The stacking of the tagets at the place location helps to demonstrate the accuracy achieved by noticing the small differences in placement between successive place operations. 
 
